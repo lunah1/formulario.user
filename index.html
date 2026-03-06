@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="forms.css">
+        <title>Formulario</title>
+    </head>
+    
+    <body>
+        <h1>Preencha seus dados</h1>
+
+        <form id="loginForm" method="post" autocomplete="off">
+            <p><label for="inome">Nome: </label>
+                <input type="text" name="username" id="inome"></p>
+
+            <p><label for="isenha">Senha: </label> 
+                <input type="password" name="password" id="isenha"> </p>
+            <p><input type="submit" value="Validar"></p>
+
+        </form>
+        <script>
+        document.getElementById("loginForm").addEventListener("submit", async function(event) {
+            event.preventDefault(); // Impede o envio do formulário
+
+            const username = document.getElementById("inome").value;
+            const password = document.getElementById("isenha").value;
+
+            const resposta = await fetch("http://localhost:8080/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const dados = await resposta.json();
+
+            if(dados.acesso){
+                document.body.innerHTML = "<h1>Acesso concedido</h1>";
+            }else{
+                document.body.innerHTML = "<h1>Acesso negado</h1>";
+            }
+        });
+    </script>
+    </body>
+</html>
